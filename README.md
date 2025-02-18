@@ -67,3 +67,65 @@ curl -X POST http://your-domain.com/users/register \
     - `password` (string, reauired): users password (minimum 6 characters).
 -`token` (string): jwt token
 
+# User Login Endpoint
+
+## Endpoint Details
+- **URL**: `/users/login`
+- **Method**: `POST`
+- **Description**: Authenticates a user and returns a JWT token.
+
+## Request Body
+```json
+{
+    "email": "string",       // Required: valid email format
+    "password": "string"     // Required: min 8 characters
+}
+```
+
+## Response Codes
+- **200 OK**: Login successful
+- **401 Unauthorized**: Invalid login credentials
+- **500 Internal Server Error**: Server-side error
+
+## Success Response
+```json
+{
+    "status": "success",
+    "message": "Login successful",
+    "user": {
+        "id": "uuid",
+        "email": "string",
+        "firstName": "string",
+        "lastName": "string"
+    },
+    "token": "jwt_token"
+}
+```
+
+## Error Response
+```json
+{
+    "status": "error",
+    "message": "Invalid login credentials"
+}
+```
+
+## Example
+```bash
+curl -X POST http://your-domain.com/users/login \
+-H "Content-Type: application/json" \
+-d '{
+    "email": "john@example.com",
+    "password": "securepass123"
+}'
+```
+
+### Example Response
+
+- `user` (object):
+    - `id` (string): user's unique identifier.
+    - `email` (string): user's email address.
+    - `firstName` (string): user's first name.
+    - `lastName` (string): user's last name.
+- `token` (string): JWT token
+
