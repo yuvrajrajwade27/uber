@@ -129,3 +129,84 @@ curl -X POST http://your-domain.com/users/login \
     - `lastName` (string): user's last name.
 - `token` (string): JWT token
 
+# User Profile Endpoint
+
+## Endpoint Details
+- **URL**: `/users/profile`
+- **Method**: `GET`
+- **Description**: Retrieves the authenticated user's profile information
+- **Authentication**: Required (JWT token in header or cookie)
+
+## Headers
+```
+Authorization: Bearer <jwt_token>
+```
+
+## Response Codes
+- **200 OK**: Profile retrieved successfully
+- **401 Unauthorized**: Invalid or missing token
+- **500 Internal Server Error**: Server-side error
+
+## Success Response
+```json
+{
+    "firstname": "string",
+    "lastname": "string",
+    "email": "string",
+    "_id": "uuid",
+    "createdAt": "timestamp",
+    "updatedAt": "timestamp"
+}
+```
+
+## Error Response
+```json
+{
+    "message": "Unauthorized"
+}
+```
+
+## Example
+```bash
+curl -X GET http://your-domain.com/users/profile \
+-H "Authorization: Bearer <your_jwt_token>"
+```
+
+# User Logout Endpoint
+
+## Endpoint Details
+- **URL**: `/users/logout`
+- **Method**: `GET`
+- **Description**: Logs out the current user and invalidates their token
+- **Authentication**: Required (JWT token in header or cookie)
+
+## Headers
+```
+Authorization: Bearer <jwt_token>
+```
+
+## Response Codes
+- **200 OK**: Logout successful
+- **401 Unauthorized**: Invalid or missing token
+- **500 Internal Server Error**: Server-side error
+
+## Success Response
+```json
+{
+    "message": "Logout successful"
+}
+```
+
+## Error Response
+```json
+{
+    "message": "Unauthorized"
+}
+```
+
+## Example
+```bash
+curl -X GET http://your-domain.com/users/logout \
+-H "Authorization: Bearer <your_jwt_token>"
+```
+
