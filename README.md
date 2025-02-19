@@ -8,7 +8,6 @@
 ## Request Body
 ```json
 {
-    "username": "string",     // Required: 3-30 characters
     "email": "string",       // Required: valid email format
     "password": "string",    // Required: min 8 characters
     "firstName": "string",   // Required: 2-50 characters
@@ -50,7 +49,6 @@
 curl -X POST http://your-domain.com/users/register \
 -H "Content-Type: application/json" \
 -d '{
-    "username": "johndoe",
     "email": "john@example.com",
     "password": "securepass123",
     "firstName": "John",
@@ -207,6 +205,190 @@ Authorization: Bearer <jwt_token>
 ## Example
 ```bash
 curl -X GET http://your-domain.com/users/logout \
+-H "Authorization: Bearer <your_jwt_token>"
+```
+
+# Captain Registration Endpoint
+
+## Endpoint Details
+- **URL**: `/captains/register`
+- **Method**: `POST`
+- **Description**: Creates a new captain account with vehicle information.
+
+## Request Body
+```json
+{
+    "firstname": "string",    // Required: 3-50 characters
+    "lastname": "string",     // Optional: 3-50 characters
+    "email": "string",       // Required: valid email format
+    "password": "string",    // Required: min 6 characters
+    "vehicle": {
+        "color": "string",   // Required: min 3 characters
+        "plate": "string",   // Required: min 3 characters
+        "capacity": "number", // Required: min 1
+        "vehicleType": "string" // Required: "car"|"motercycle"|"auto"|"van"
+    }
+}
+```
+
+## Response Codes
+- **201 Created**: Registration successful
+- **400 Bad Request**: Invalid input data or captain already exists
+- **500 Internal Server Error**: Server-side error
+
+## Success Response
+```json
+{
+    "captain": {
+        "firstname": "string",
+        "lastname": "string",
+        "email": "string",
+        "status": "inactive",
+        "vehicle": {
+            "color": "string",
+            "plate": "string",
+            "capacity": "number",
+            "vehicleType": "string"
+        },
+        "_id": "uuid",
+        "createdAt": "timestamp",
+        "updatedAt": "timestamp"
+    },
+    "token": "jwt_token"
+}
+```
+
+## Error Response
+```json
+{
+    "message": "Error message"
+}
+```
+
+## Example
+```bash
+curl -X POST http://your-domain.com/captains/register \
+-H "Content-Type: application/json" \
+-d '{
+    "firstname": "John",
+    "lastname": "Doe",
+    "email": "john@example.com",
+    "password": "securepass123",
+    "vehicle": {
+        "color": "black",
+        "plate": "ABC123",
+        "capacity": 4,
+        "vehicleType": "car"
+    }
+}'
+```
+
+# Captain Login Endpoint
+
+## Endpoint Details
+- **URL**: `/captains/login`
+- **Method**: `POST`
+- **Description**: Authenticates a captain and returns a JWT token.
+
+## Request Body
+```json
+{
+    "email": "string",       // Required: valid email format
+    "password": "string"     // Required: min 6 characters
+}
+```
+
+## Response Codes
+- **200 OK**: Login successful
+- **401 Unauthorized**: Invalid login credentials
+- **500 Internal Server Error**: Server-side error
+
+## Success Response
+```json
+{
+    "captain": {
+        "firstname": "string",
+        "lastname": "string",
+        "email": "string",
+        "status": "string",
+        "vehicle": {
+            "color": "string",
+            "plate": "string",
+            "capacity": "number",
+            "vehicleType": "string"
+        },
+        "_id": "uuid",
+        "createdAt": "timestamp",
+        "updatedAt": "timestamp"
+    },
+    "token": "jwt_token"
+}
+```
+
+## Error Response
+```json
+{
+    "message": "Invalid login credentials"
+}
+```
+
+## Example
+```bash
+curl -X POST http://your-domain.com/captains/login \
+-H "Content-Type: application/json" \
+-d '{
+    "email": "john@example.com",
+    "password": "securepass123"
+}'
+```
+
+### Captain Endpoints
+
+#### GET /captains/profile
+Get the profile information of the authenticated captain.
+
+**Authorization**: using Bearer Token or cookie token
+
+**Response**
+- Status: 200 OK
+```json
+{
+    "firstname": "string",
+    "lastname": "string",
+    "email": "string",
+    "vehicle": {
+        "color": "string",
+        "plate": "string",
+        "capacity": "number",
+        "vehicleType": "string"
+    }
+}
+```
+
+#### GET /captains/logout
+Log out the currently authenticated captain and invalidate their token.
+
+**Authorization**: using Bearer Token or cookie token
+
+**Response**
+- Status: 200 OK
+```json
+{
+    "message": "Logged out successfully"
+}
+```
+
+**Error Response**
+- Status: 401 Unauthorized
+```json
+{
+    "message": "Unauthorized"
+}
+```
+
+**Example**
+```bash
+curl -X GET http://your-domain.com/captains/logout \
 -H "Authorization: Bearer <your_jwt_token>"
 ```
 

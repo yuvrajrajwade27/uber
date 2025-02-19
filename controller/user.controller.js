@@ -18,6 +18,7 @@ const registerUser = async (req, res) => {
         password: hashPassword
     });
     const token = await user.generateAuthToken();
+    res.header("Authorization", `Bearer ${token}`);
     res.cookie("token", token)
     res.status(201).json({user, token});
 }
@@ -33,6 +34,7 @@ const loginUser = async (req, res) => {
         return res.status(401).json({ message: 'Invalid login credentials' });
     }
     const token = await user.generateAuthToken();
+    res.header("Authorization", `Bearer ${token}`);
     res.cookie("token", token)
     res.status(200).json({ user, token });
 }
