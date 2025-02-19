@@ -24,7 +24,7 @@ const registerCaptain = async (req, res, next) => {
         });
         const token = await captain.generateAuthToken();
         res.header("Authorization", `Bearer ${token}`);
-        res.cookie("token", token, { httpOnly: true });
+        res.cookie("token", token);
         res.status(201).json({token, captain});
     } catch (err) {
         next(err);
